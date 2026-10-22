@@ -4,7 +4,7 @@ const councils = ['President','Vice President','Finance','Secretary','Academics 
 const api=window.traceBackend;
 const app=document.querySelector('#app');
 const admin=document.body.dataset.view==='admin';
-if(admin&&window.location.hash==='#/login')api.clearSession();
+if(admin&&window.location.hash==='#/login'&&performance.getEntriesByType('navigation')[0]?.type!=='reload')api.clearSession();
 let selected='',search='',tab='councils',signedIn=admin&&!!api.token(),data={reports:[],feedback:[],feedbackCount:0};
 let loading=true,loadError='',loadSequence=0,lastLoad=0;
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -24,7 +24,7 @@ function expireLogin(){signedIn=false;data={reports:[],feedback:[],feedbackCount
 function formBusy(form,busy){form.dataset.busy=busy?'true':'false';const button=form.querySelector('button[type="submit"],button.primary');if(button)button.disabled=busy}
 async function submitLogin(e){
  e.preventDefault();const form=e.target;if(form.dataset.busy==='true')return;const f=new FormData(form);formBusy(form,true);form.querySelector('#login-error').textContent='';
- try{await api.login(String(f.get('username')),String(f.get('password')));signedIn=true;loading=true;data={reports:[],feedback:[],feedbackCount:0};render();await load()}
+ try{await api.login(String(f.get('username')),String(f.get('password')));signedIn=true;window.CSCIdleSession?.start();history.replaceState(history.state,"",location.pathname+location.search);loading=true;data={reports:[],feedback:[],feedbackCount:0};render();await load()}
  catch(error){const message=document.querySelector('#login-error');if(message)message.textContent=error.message}finally{formBusy(form,false)}
 }
 async function submitReport(e,report){
