@@ -36,7 +36,7 @@ async function submitReport(e,report){
  try{const result=await api.request('save',updated,true);if(!result.report||!result.report.id)throw new Error('Save response was incomplete. Refresh before trying again.');data.reports=data.reports.filter(r=>r.id!==result.report.id);data.reports.push(result.report);closeModal();render();notify(updated.published?'Accomplishment published.':'Draft saved.')}
  catch(error){if(error.code==='UNAUTHORIZED'){expireLogin();render()}notify(error.message)}finally{formBusy(form,false)}
 }
-async function logout(){try{await api.logout()}catch(error){notify(error.message)}finally{expireLogin();selected='';tab='councils';window.location.replace('https://centralstudentcouncil2026-rgb.github.io/CSC-SYNC-Admin/csc-officers.html')}}
+function logout(){void api.logout().catch(()=>{});expireLogin();selected='';tab='councils';window.location.replace('https://centralstudentcouncil2026-rgb.github.io/CSC-SYNC-Admin/csc-officers.html')}
 async function deleteReport(report){
  const button=document.querySelector('#confirm-delete');if(button.disabled)return;button.disabled=true;
  try{await api.request('delete',{id:report.id},true);data.reports=data.reports.filter(r=>r.id!==report.id);closeModal();render();notify('Report deleted.')}

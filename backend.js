@@ -13,6 +13,7 @@ window.traceBackend = (() => {
     try {
       const response = await fetch(action === 'list' ? url + '?action=list' : url, {
         method: action === 'list' ? 'GET' : 'POST',
+        ...(action === 'logout' ? { keepalive: true } : {}),
         redirect: 'follow', credentials: 'omit', cache: 'no-store', signal: controller.signal,
         ...(action === 'list' ? {} : { headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ ...payload, action, ...(authenticated ? { token: token() } : {}) }) })
       });
