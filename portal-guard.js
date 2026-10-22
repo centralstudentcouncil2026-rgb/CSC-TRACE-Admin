@@ -16,6 +16,9 @@
   Object.defineProperty(window, 'CSCPortalContext', { value: context, configurable: true });
 
   function updateLinks() {
+    if (site === 'CSC-TRACE-Admin') {
+      document.querySelectorAll('header [data-csc-portal-back], header a.csc-dashboard-back, header .csc-return-guard').forEach(link => link.remove());
+    }
     let links = document.querySelectorAll('[data-csc-portal-back], a.csc-dashboard-back');
     if (!links.length) {
       const mount = document.querySelector(site === 'CSC-TRACE-Admin' ? '.auth-card, .login-card, .auth-panel' : '.auth-card, .login-card, .auth-panel, .org-header-controls, .admin-header-controls, header .brand, .admin-header-row');
