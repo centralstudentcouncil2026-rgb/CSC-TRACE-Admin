@@ -551,3 +551,8 @@ body[data-view="admin"] header .header-actions { flex:0 0 auto; margin-left:auto
  body[data-view="admin"] header .seal { flex-shrink:0; }
  body[data-view="admin"] header .header-actions .icon-button { padding:8px 10px; font-size:12px; }
 }
+
+/* Publishing remains available in the desktop header. */
+@media(max-width:700px) {
+ body[data-view="admin"] header .new-accomplishment { display:none; }
+}
