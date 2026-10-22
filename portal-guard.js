@@ -18,7 +18,7 @@
   function updateLinks() {
     let links = document.querySelectorAll('[data-csc-portal-back], a.csc-dashboard-back');
     if (!links.length) {
-      const mount = document.querySelector('.auth-card, .login-card, .auth-panel, .org-header-controls, .admin-header-controls, header .brand, .admin-header-row');
+      const mount = document.querySelector(site === 'CSC-TRACE-Admin' ? '.auth-card, .login-card, .auth-panel' : '.auth-card, .login-card, .auth-panel, .org-header-controls, .admin-header-controls, header .brand, .admin-header-row');
       if (mount) {
         const link = document.createElement('a');
         link.className = 'csc-return-guard';

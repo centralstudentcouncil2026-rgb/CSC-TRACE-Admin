@@ -4,6 +4,7 @@ const councils = ['President','Vice President','Finance','Secretary','Academics 
 const api=window.traceBackend;
 const app=document.querySelector('#app');
 const admin=document.body.dataset.view==='admin';
+if(admin&&window.location.hash==='#/login')api.clearSession();
 let selected='',search='',tab='councils',signedIn=admin&&!!api.token(),data={reports:[],feedback:[],feedbackCount:0};
 let loading=true,loadError='',loadSequence=0,lastLoad=0;
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -35,7 +36,7 @@ async function submitReport(e,report){
  try{const result=await api.request('save',updated,true);if(!result.report||!result.report.id)throw new Error('Save response was incomplete. Refresh before trying again.');data.reports=data.reports.filter(r=>r.id!==result.report.id);data.reports.push(result.report);closeModal();render();notify(updated.published?'Accomplishment published.':'Draft saved.')}
  catch(error){if(error.code==='UNAUTHORIZED'){expireLogin();render()}notify(error.message)}finally{formBusy(form,false)}
 }
-async function logout(){try{await api.logout()}catch(error){notify(error.message)}finally{expireLogin();selected='';tab='councils';render();load()}}
+async function logout(){try{await api.logout()}catch(error){notify(error.message)}finally{expireLogin();selected='';tab='councils';window.location.replace('https://centralstudentcouncil2026-rgb.github.io/CSC-SYNC-Admin/csc-officers.html')}}
 async function deleteReport(report){
  const button=document.querySelector('#confirm-delete');if(button.disabled)return;button.disabled=true;
  try{await api.request('delete',{id:report.id},true);data.reports=data.reports.filter(r=>r.id!==report.id);closeModal();render();notify('Report deleted.')}
@@ -43,7 +44,7 @@ async function deleteReport(report){
 }
 function notify(message){document.querySelector('.toast')?.remove();const toast=document.createElement('div');toast.className='toast';toast.setAttribute('role','status');toast.textContent=message;document.body.append(toast);setTimeout(()=>toast.remove(),6000)}
 function published(){return data.reports.filter(r=>r.published)}
-function header(){return `<header><div class="brand"><a class="seal" href="index.html" aria-label="CSC home"><img src="assets/csc-logo.png" alt="Central Student Council logo" width="44" height="66"></a><a class="wordmark" href="index.html"><strong>CSC T.R.A.C.E.</strong><small>Transparency, Reporting, Accountability, Communication, and Evaluation</small></a></div>${admin&&signedIn?'<div class="admin-actions header-actions"><button class="primary" data-action="new">New accomplishment</button><button class="icon-button" data-action="logout">Log out</button></div>':''}</header>`}
+function header(){return `<header><div class="brand"><a class="seal" href="index.html" aria-label="CSC home"><img src="assets/csc-logo.png" alt="Central Student Council logo" width="44" height="66"></a><a class="wordmark" href="index.html"><strong>CSC T.R.A.C.E.</strong><small>Transparency, Reporting, Accountability, Communication, and Evaluation</small></a></div>${admin&&signedIn?'<div class="admin-actions header-actions"><button class="icon-button" data-action="logout">Log out</button></div>':''}</header>`}
 function footer(){return `<footer><strong>CSC T.R.A.C.E.</strong><span>Transparent leadership. Meaningful impact.</span><small>Central Student Council</small></footer>`}
 function render(){
  stopPanorama();

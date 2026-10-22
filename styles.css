@@ -538,3 +538,16 @@ header { justify-content: space-between; gap: 16px; }
 .evaluate-button:hover { background: #cbdfff; }
 .modal > .evaluate-button { margin: 0 10px 10px 0; }
 .field-help { display: block; margin-top: 6px; font-size: 10px; font-weight: 400; color: #73819b; line-height: 1.5; }
+
+/* Keep TRACE administration identity and logout on one header row. */
+body[data-view="admin"] header:has(.header-actions) { height:64px; min-height:64px; flex-wrap:nowrap; padding:0 16px; gap:12px; }
+body[data-view="admin"] header .brand { min-width:0; flex:1; }
+body[data-view="admin"] header .wordmark { min-width:0; }
+body[data-view="admin"] header .wordmark strong { font-size:clamp(14px,3.8vw,24px); white-space:nowrap; }
+body[data-view="admin"] header .header-actions { flex:0 0 auto; margin-left:auto; }
+@media(max-width:700px) {
+ body[data-view="admin"] header:has(.header-actions) { height:58px; min-height:58px; padding:0 12px; gap:8px; }
+ body[data-view="admin"] header .brand { gap:8px; }
+ body[data-view="admin"] header .seal { flex-shrink:0; }
+ body[data-view="admin"] header .header-actions .icon-button { padding:8px 10px; font-size:12px; }
+}
